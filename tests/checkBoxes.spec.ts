@@ -33,7 +33,7 @@ test('Validate selected specialties', async ({page}) => {
     //Check the "dentistry" item specialty
     await page.getByRole('checkbox', {name: "dentistry"}).check()
     //Add assertion of the "Specialties" field. The value "surgery, dentistry" is displayed
-    await expect (vetSpecialtiesList).toHaveText('surgery, dentistry')
+    await expect(vetSpecialtiesList).toHaveText('surgery, dentistry')
 })
 
 test('Select all specialties', async ({page}) => {
@@ -41,7 +41,7 @@ test('Select all specialties', async ({page}) => {
     await page.getByRole('row', {name:'Rafael Ortega'}).getByRole('button', {name:'Edit Vet'}).click()
     //Add assertion that "Specialties" field is displayed value "surgery"
     const vetSpecialtiesList = page.locator('.selected-specialties')
-    await expect (vetSpecialtiesList).toContainText('surgery')
+    await expect(vetSpecialtiesList).toContainText('surgery')
     //Click on the "Specialties" drop-down menu
     await vetSpecialtiesList.click()
     //Check all specialties from the list & Add assertion that all specialties are checked
@@ -59,7 +59,7 @@ test('Unselect all specialties', async ({page}) => {
     await page.getByRole('row', {name:'Linda Douglas'}).getByRole('button', {name:'Edit Vet'}).click()
     //Add assertion of the "Specialties" field displayed value "surgery, dentistry"
     const vetSpecialtiesList = page.locator('.selected-specialties')
-    await expect (vetSpecialtiesList).toContainText('dentistry, surgery')
+    await expect(vetSpecialtiesList).toContainText('dentistry, surgery')
     //Click on the "Specialties" drop-down menu
     await vetSpecialtiesList.click()
     //Uncheck all specialties from the list & Add assertion that all specialties are unchecked
@@ -69,5 +69,5 @@ test('Unselect all specialties', async ({page}) => {
         await expect(await box.isChecked()).toBeFalsy()
     } 
     //Add assertion that "Specialties" field is empty
-    await expect (vetSpecialtiesList).toBeEmpty()
+    await expect(vetSpecialtiesList).toBeEmpty()
 })
