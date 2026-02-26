@@ -14,22 +14,22 @@ test('Validate selected specialties', async ({page}) => {
     //Select the veterinarian "Helen Leary" and click "Edit Vet" button
     await page.getByRole('row', {name:'Helen Leary'}).getByRole('button', {name:'Edit Vet'}).click()
     //Add assertion of the "Specialties" field.
-    await expect (page.locator('label[for="spec"]')).toHaveText('Specialties')
+    await expect(page.locator('label[for="spec"]')).toHaveText('Specialties')
     //The value "radiology" is displayed
     const vetSpecialtiesList = page.locator('.selected-specialties')
-    await expect (vetSpecialtiesList).toContainText('radiology')
+    await expect(vetSpecialtiesList).toContainText('radiology')
     //Click on the "Specialties" drop-down menu
     await vetSpecialtiesList.click()
     //Add assertion that "radiology" specialty is checked
-    await expect (page.getByRole('checkbox', {name: "radiology"})).toBeChecked()
+    await expect(page.getByRole('checkbox', {name: "radiology"})).toBeChecked()
     //Add assertion that "surgery" and "dentistry" specialties are unchecked
-    await expect (page.getByRole('checkbox', {name: "surgery"})).not.toBeChecked()
-    await expect (page.getByRole('checkbox', {name: "dentistry"})).not.toBeChecked()
+    await expect(page.getByRole('checkbox', {name: "surgery"})).not.toBeChecked()
+    await expect(page.getByRole('checkbox', {name: "dentistry"})).not.toBeChecked()
     //Check the "surgery" item specialty and uncheck the "radiology" item speciality 
     await page.getByRole('checkbox', {name: "surgery"}).check()
     await page.getByRole('checkbox', {name: "radiology"}).uncheck()
     //Add assertion of the "Specialties" field displayed value "surgery"
-    await expect (vetSpecialtiesList).toContainText('surgery')
+    await expect(vetSpecialtiesList).toContainText('surgery')
     //Check the "dentistry" item specialty
     await page.getByRole('checkbox', {name: "dentistry"}).check()
     //Add assertion of the "Specialties" field. The value "surgery, dentistry" is displayed
@@ -51,7 +51,7 @@ test('Select all specialties', async ({page}) => {
         await expect(await box.isChecked()).toBeTruthy()
     } 
     //Add assertion that all checked specialities are displayed in the "Specialties" field
-    await expect (vetSpecialtiesList).toHaveText('surgery, radiology, dentistry')
+    await expect(vetSpecialtiesList).toHaveText('surgery, radiology, dentistry')
 })
 
 test('Unselect all specialties', async ({page}) => {
