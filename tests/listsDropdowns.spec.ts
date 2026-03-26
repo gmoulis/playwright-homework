@@ -25,12 +25,11 @@ test('Validate selected pet types from the list', async ({page}) => {
     await page.locator('[name="birthDate"]').fill('2022/03/24')
     //Select the pet type "cat" from the drop-down menu
     const petTypeDropdown = page.locator('[name="pettype"]')
-    await petTypeDropdown.click()
     await petTypeDropdown.selectOption('cat')
     //Save the new pet
     await page.getByRole('button', {name:'Save Pet'}).click()
     //In the "Pets and Visits" section, click on "Edit Pet" button for the pet with the name "Leo"
-    await page.getByRole('button', {name: "Edit Pet"}).click()
+    await page.locator('app-pet-list', { hasText: 'Leo' }).getByRole('button', { name: 'Edit Pet' }).click()
     //Add assertion of "Pet" text displayed as a header on the page
     await expect(page.getByRole('heading')).toHaveText('Pet')
     //Add the assertion "George Franklin" name is displayed in the "Owner" field
@@ -38,17 +37,8 @@ test('Validate selected pet types from the list', async ({page}) => {
     //Add the assertion that the value "cat" is displayed in the "Type" field 
     await expect(petTypeDropdown).toHaveValue('cat')
     //Using a loop, select the values from the drop-down one by one, and add the assertion that every selected value from the drop-down is displayed in the "Type" field
-    
-    const types = {
-        "cat": "cat",
-        "dog": "dog",
-        "lizard": "lizard",
-        "snake": "snake",
-        "bird": "bird",
-        "hamster": "hamster"
-    }
-
-    for (const type in types) {
+    const types = await page.locator('[name="pettype"] option').allTextContents()
+    for (const type of types) {
         await petTypeDropdown.selectOption(type)
         await expect(page.locator('[name="type1"]' )).toHaveValue(type)
     }
@@ -61,7 +51,8 @@ test('Validate the pet type update', async ({page}) => {
 // Select the owner "Eduardo Rodriquez"
 await page.getByRole('link', {name:'Eduardo Rodriquez'}).click()
 // In the "Pets and Visits" section, click on "Edit Pet" button for the pet with the name "Rosy"
-await page.locator ('td', {hasText: 'Rosy'}).getByRole('button', {name: "Edit Pet"}).click()
+const rosyPetSection = await page.locator('app-pet-list', {hasText: 'Rosy'})
+await rosyPetSection.getByRole('button', {name: "Edit Pet"}).click()
 // Add the assertion that the name "Rosy" is displayed in the input field "Name"
 await expect(page.locator('[name="name"]')).toHaveValue('Rosy')
 // Add the assertion the value "dog" is displayed in the "Type" field
@@ -69,7 +60,6 @@ const petTypeDropdown = page.locator('[name="pettype"]')
 const petTypeField = page.locator('[name="type1"]')
 await expect(petTypeField).toHaveValue('dog')
 // From the drop-down menu, select the value "bird"
-await petTypeDropdown.click()
 await petTypeDropdown.selectOption('bird')
 // On the "Pet details" page, add the assertion the value "bird" is displayed in the "Type" field as well as drop-down input field
 await expect(petTypeField).toHaveValue('bird')
@@ -77,17 +67,12 @@ await expect(petTypeDropdown).toHaveValue('bird')
 // Select the "Update Pet" button
 await page.getByRole('button', {name: "Update Pet"}).click()
 // On the "Owner Information" page, add the assertion that the pet "Rosy" has a new value of the Type "bird"
-await expect(page.locator('td', {hasText: 'Rosy'})).toHaveText(/bird/)
+await expect(rosyPetSection.locator('dd').nth(2)).toHaveText('bird')
 // Select the "Edit Pet" button one more time, and perform steps 6-10 to revert the selection of the pet type "bird" to its initial value "dog"
-await page.locator ('td', {hasText: 'Rosy'}).getByRole('button', {name: "Edit Pet"}).click()
+await rosyPetSection.getByRole('button', {name: "Edit Pet"}).click()
 await expect(petTypeField).toHaveValue('bird')
-await petTypeDropdown.click()
 await petTypeDropdown.selectOption('dog')
 await expect(petTypeField).toHaveValue('dog')
 await expect(petTypeDropdown).toHaveValue('dog')
 await page.getByRole('button', {name: "Update Pet"}).click()
 })
-
-
-
-// To select the options from the dropdown, use the Playwright method selectOption()
